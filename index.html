@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Lámfalusi Levente</title>
   <meta name="description" content="Lámfalusi Levente, Computer Science BSc student interested in AI and data engineering. GitHub, LinkedIn, email and featured projects.">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark">
 
   <!-- Open Graph. CHANGE og:url and og:image if the repository is not named teppe21.github.io -->
   <meta property="og:type" content="website">
@@ -14,66 +14,43 @@
   <meta property="og:url" content="https://teppe21.github.io/">
   <meta property="og:image" content="https://teppe21.github.io/assets/profile.jpg">
 
+  <!-- Umami analytics (cookie-free). Each link has data-umami-event="..." so clicks show up as events.
+       REPLACE the website ID with yours from cloud.umami.is (Settings > Websites), then remove the comment markers. -->
+  <!-- <script defer src="https://cloud.umami.is/script.js" data-website-id="YOUR-WEBSITE-ID"></script> -->
+
   <!-- Favicon: a 2x2 chessboard, inline so it costs no request -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23E6ECEB'/%3E%3Cpath d='M7 0h9v16H0V7a7 7 0 0 1 7-7zm9 16h16v9a7 7 0 0 1-7 7h-9z' fill='%23234A3A'/%3E%3C/svg%3E">
 
   <style>
     /* ================= COLORS: change the theme here ================= */
     :root {
-      --bg: #E4EAE8;              /* page base */
-      --text: #0F1A17;
-      --muted: #36433F;           /* secondary text */
-      --ink: #1F4636;             /* piece icons, links */
-      --focus: #1D5BD6;
+      --bg: #000000;              /* page base */
+      --text: #F2F2F2;
+      --muted: #BDBDBD;           /* secondary text */
+      --ink: #9FD3B6;             /* piece icons, links */
+      --focus: #8DB8FF;
 
-      --sq-light: #EEF2F0;        /* chessboard squares */
-      --sq-dark: #C5D0CC;
-      --piece: #1F4636;           /* big background pieces */
+      --sq-light: #121212;        /* chessboard squares */
+      --sq-dark: #000000;
+      --piece: #9FD3B6;           /* big background pieces */
 
-      --blob-1: #6FA35A;          /* moss */
-      --blob-2: #E3A93F;          /* amber */
-      --blob-3: #4A7FC1;          /* lake */
-      --blob-4: #9B78C4;          /* heather */
+      --blob-1: #2F6A2B;          /* moss */
+      --blob-2: #835A16;          /* amber */
+      --blob-3: #24497F;          /* lake */
+      --blob-4: #503B78;          /* heather */
 
-      --glass: rgba(255, 255, 255, 0.58);        /* translucent surface */
-      --glass-hover: rgba(255, 255, 255, 0.70);
-      --glass-border: rgba(255, 255, 255, 0.85);
-      --glass-edge: rgba(255, 255, 255, 0.95);   /* specular top edge */
-      --glass-shade: rgba(20, 45, 35, 0.10);
-      --spec: rgba(255, 255, 255, 0.55);         /* pointer highlight */
-      --solid: #F7F9F8;                          /* fallback: no glass */
+      --glass: rgba(16, 16, 16, 0.55);           /* translucent surface */
+      --glass-hover: rgba(30, 30, 30, 0.62);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-edge: rgba(255, 255, 255, 0.20);   /* specular top edge */
+      --glass-shade: rgba(0, 0, 0, 0.50);
+      --spec: rgba(255, 255, 255, 0.10);         /* pointer highlight */
+      --solid: #121212;                          /* fallback: no glass */
 
       --r-card: 28px;
       --r-btn: 22px;
       --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
       --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0C1513;
-        --text: #F1F5F3;
-        --muted: #C6D1CD;
-        --ink: #9FD3B6;
-        --focus: #8DB8FF;
-
-        --sq-light: #17221F;
-        --sq-dark: #0F1816;
-        --piece: #9FD3B6;
-
-        --blob-1: #3F7A3A;
-        --blob-2: #9A6A1E;
-        --blob-3: #2D5590;
-        --blob-4: #5E4689;
-
-        --glass: rgba(22, 32, 30, 0.55);
-        --glass-hover: rgba(34, 46, 43, 0.62);
-        --glass-border: rgba(255, 255, 255, 0.14);
-        --glass-edge: rgba(255, 255, 255, 0.22);
-        --glass-shade: rgba(0, 0, 0, 0.35);
-        --spec: rgba(255, 255, 255, 0.10);
-        --solid: #18221F;
-      }
     }
 
     /* ================= Base ================= */
@@ -457,26 +434,26 @@
       <nav aria-label="Profiles and contact">
         <ul class="links">
           <li>
-            <a class="link glass" href="https://github.com/teppe21">
+            <a class="link glass" href="https://github.com/teppe21" data-umami-event="GitHub">
               <svg aria-hidden="true"><use href="#i-knight"/></svg>
               <span class="link-text"><span class="link-label">GitHub</span><span class="link-sub">github.com/teppe21</span></span>
             </a>
           </li>
           <li>
             <!-- "á" is percent-encoded (%C3%A1) in the href so every in-app browser opens it correctly -->
-            <a class="link glass" href="https://www.linkedin.com/in/levente-l%C3%A1mfalusi">
+            <a class="link glass" href="https://www.linkedin.com/in/levente-l%C3%A1mfalusi" data-umami-event="LinkedIn">
               <svg aria-hidden="true"><use href="#i-bishop"/></svg>
               <span class="link-text"><span class="link-label">LinkedIn</span><span class="link-sub">linkedin.com/in/levente-lámfalusi</span></span>
             </a>
           </li>
           <li>
-            <a class="link glass" href="https://github.com/teppe21?tab=repositories">
+            <a class="link glass" href="https://github.com/teppe21?tab=repositories" data-umami-event="Projects">
               <svg aria-hidden="true"><use href="#i-rook"/></svg>
               <span class="link-text"><span class="link-label">Projects</span><span class="link-sub">All repositories on GitHub</span></span>
             </a>
           </li>
           <li>
-            <a class="link glass" href="mailto:lamfalusilevi@gmail.com">
+            <a class="link glass" href="mailto:lamfalusilevi@gmail.com" data-umami-event="Email">
               <svg aria-hidden="true"><use href="#i-pawn"/></svg>
               <span class="link-text"><span class="link-label">Email</span><span class="link-sub">lamfalusilevi@gmail.com</span></span>
             </a>
@@ -490,12 +467,12 @@
           <article class="card glass">
             <h3>File Suite</h3>
             <p>Desktop file utility for organizing files, scanning for duplicates and undoing changes, for Linux and Windows.</p>
-            <a href="https://github.com/teppe21/File-Suite">File Suite on GitHub</a>
+            <a href="https://github.com/teppe21/File-Suite" data-umami-event="File Suite">File Suite on GitHub</a>
           </article>
           <article class="card glass">
             <h3>Finances</h3>
             <p>Native Android personal finance app built with Kotlin and Jetpack Compose, with notification import, receipt OCR and automatic categorization.</p>
-            <a href="https://github.com/teppe21/Finances_Android">Finances on GitHub</a>
+            <a href="https://github.com/teppe21/Finances_Android" data-umami-event="Finances">Finances on GitHub</a>
           </article>
         </div>
       </section>
