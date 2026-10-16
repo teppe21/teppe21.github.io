@@ -18,7 +18,7 @@
   <script defer src="https://cloud.umami.is/script.js" data-website-id="decac811-934c-48a4-8481-5ea63d1e7852"></script>
 
   <!-- Favicon: a 2x2 chessboard, inline so it costs no request -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23E6ECEB'/%3E%3Cpath d='M7 0h9v16H0V7a7 7 0 0 1 7-7zm9 16h16v9a7 7 0 0 1-7 7h-9z' fill='%23234A3A'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23E2E2E2'/%3E%3Cpath d='M7 0h9v16H0V7a7 7 0 0 1 7-7zm9 16h16v9a7 7 0 0 1-7 7h-9z' fill='%23000000'/%3E%3C/svg%3E">
 
   <style>
     /* ================= COLORS: change the theme here ================= */
@@ -26,17 +26,17 @@
       --bg: #000000;              /* page base */
       --text: #F2F2F2;
       --muted: #BDBDBD;           /* secondary text */
-      --ink: #9FD3B6;             /* piece icons, links */
+      --ink: #E2E2E2;             /* piece icons, links */
       --focus: #8DB8FF;
 
-      --sq-light: #121212;        /* chessboard squares */
+      --sq-light: #0B0B0B;        /* chessboard squares */
       --sq-dark: #000000;
-      --piece: #9FD3B6;           /* big background pieces */
+      --piece: #FFFFFF;           /* big background pieces */
 
-      --blob-1: #2F6A2B;          /* moss */
-      --blob-2: #835A16;          /* amber */
-      --blob-3: #24497F;          /* lake */
-      --blob-4: #503B78;          /* heather */
+      --blob-1: #1B2740;          /* midnight */
+      --blob-2: #5C3F10;          /* amber */
+      --blob-3: #1A355E;          /* lake */
+      --blob-4: #382A57;          /* heather */
 
       --glass: rgba(16, 16, 16, 0.55);           /* translucent surface */
       --glass-hover: rgba(30, 30, 30, 0.62);
@@ -219,26 +219,12 @@
       gap: 0.25rem;
     }
 
-    /* Avatar: glass ring of alternating light/dark squares around the photo */
+    /* Avatar: plain circular photo */
     .avatar {
       width: clamp(116px, 30vw, 148px);
       aspect-ratio: 1;
-      padding: 7px;
       border-radius: 50%;
       margin-bottom: 1rem;
-    }
-    .avatar::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      padding: 6px;
-      background: repeating-conic-gradient(from -11.25deg, var(--ink) 0 22.5deg, transparent 0 45deg);
-      opacity: 0.35;
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-      pointer-events: none;
     }
     .avatar-inner {
       display: grid;
@@ -418,7 +404,7 @@
 
   <div class="page">
     <header class="profile">
-      <div class="avatar glass">
+      <div class="avatar">
         <div class="avatar-inner">
           <span aria-hidden="true">LL</span>
           <!-- PROFILE PHOTO: replace assets/profile.jpg (square, 512x512). If it is missing, the "LL" initials show instead. -->
