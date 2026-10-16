@@ -31,7 +31,6 @@
 
       --sq-light: #0B0B0B;        /* chessboard squares */
       --sq-dark: #000000;
-      --piece: #FFFFFF;           /* big background pieces */
 
       --blob-1: #1B2740;          /* midnight */
       --blob-2: #5C3F10;          /* amber */
@@ -75,7 +74,7 @@
       outline-offset: 3px;
     }
 
-    /* ================= Background: board, blobs, pieces ================= */
+    /* ================= Background: board, blobs ================= */
     .bg {
       position: fixed;
       inset: 0;
@@ -117,21 +116,6 @@
 
     @keyframes drift {
       to { transform: translate3d(12vmax, 8vmax, 0) scale(1.15); }
-    }
-
-    .piece {
-      position: absolute;
-      color: var(--piece);
-      fill: currentColor;
-      opacity: 0.08;
-      animation: float 40s ease-in-out infinite alternate;
-    }
-    .piece.knight { width: clamp(220px, 38vmax, 620px); height: auto; aspect-ratio: 1; right: -6vmax; top: 4vh; }
-    .piece.king   { width: clamp(200px, 32vmax, 540px); height: auto; aspect-ratio: 1; left: -8vmax; bottom: 2vh; animation-duration: 55s; }
-    .piece.pawn   { width: clamp(120px, 16vmax, 280px); height: auto; aspect-ratio: 1; left: 42vw; top: 55vh; animation-duration: 47s; }
-
-    @keyframes float {
-      to { transform: translate3d(0, -3vmax, 0) rotate(-3deg); }
     }
 
     /* ================= Glass surface ================= */
@@ -350,7 +334,7 @@
 
     /* ================= Reduced motion: everything stands still ================= */
     @media (prefers-reduced-motion: reduce) {
-      .blob, .piece { animation: none; }
+      .blob { animation: none; }
       .link { transition: none; }
       .link:hover, .link:active { transform: none; }
     }
@@ -380,14 +364,6 @@
       <path d="M21 22h6c1 6 3 12 4 17H17c1-5 3-11 4-17z"/>
       <rect x="12" y="39" width="24" height="5" rx="2"/>
     </symbol>
-    <symbol id="i-king" viewBox="0 0 48 48">
-      <rect x="22.5" y="2" width="3" height="11" rx="1"/>
-      <rect x="19" y="5" width="10" height="3" rx="1"/>
-      <path d="M13 17q11-5 22 0l-5 14H18z"/>
-      <rect x="16" y="31" width="16" height="3" rx="1.5"/>
-      <path d="M18 34h12l2 5H16z"/>
-      <rect x="12" y="39" width="24" height="5" rx="2"/>
-    </symbol>
   </svg>
 
   <!-- Decorative background -->
@@ -397,9 +373,6 @@
     <div class="blob"></div>
     <div class="blob"></div>
     <div class="blob"></div>
-    <svg class="piece knight"><use href="#i-knight"/></svg>
-    <svg class="piece king"><use href="#i-king"/></svg>
-    <svg class="piece pawn"><use href="#i-pawn"/></svg>
   </div>
 
   <div class="page">
