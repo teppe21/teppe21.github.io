@@ -323,6 +323,21 @@
       border-radius: 6px;
     }
 
+    /* One-line tech stack and quality facts under a card description */
+    .facts {
+      list-style: none;
+      margin: 0 0 0.875rem;
+      padding: 0;
+      color: var(--muted);
+      font-size: 0.8125rem;
+    }
+
+    /* Skills: label and items on one line, wrapping on narrow screens */
+    .skills { margin: 0; display: grid; gap: 0.5rem; font-size: 0.9375rem; }
+    .skills div { display: flex; flex-wrap: wrap; column-gap: 0.5rem; }
+    .skills dt { font-weight: 600; }
+    .skills dd { margin: 0; color: var(--muted); }
+
     /* ================= Footer ================= */
     .footer {
       color: var(--text);
@@ -386,6 +401,7 @@
       </div>
       <h1 class="name">Lámfalusi Levente</h1>
       <p class="tagline">First-year Computer Science BSc student at the University of Debrecen and Software Architect at Sidekick Automations, ensuring systems are production-ready. Especially interested in AI, data science and data engineering.</p>
+      <p class="tagline">Debrecen, Hungary</p>
     </header>
 
     <main>
@@ -423,10 +439,21 @@
         <h2 id="experience-title">Experience</h2>
         <div class="cards">
           <article class="card glass">
-            <h3>Software Architect</h3>
+            <h3>Software Architect (part-time)</h3>
             <p>October 2026 – Present. Making sure systems work correctly and reliably before they reach production: design reviews, validation, quality gates and release readiness. Sidekick Automations builds company-tailored AI and automation solutions.</p>
             <a href="https://sidekickautomations.hu/" data-umami-event="Sidekick Automations">Sidekick Automations</a>
           </article>
+        </div>
+      </section>
+
+      <section class="projects" aria-labelledby="skills-title">
+        <h2 id="skills-title">Skills</h2>
+        <div class="card glass">
+          <dl class="skills">
+            <div><dt>Languages</dt><dd>Python, Kotlin</dd></div>
+            <div><dt>Data/AI</dt><dd>SQLite (Room), on-device OCR (ML Kit), AI-assisted development (Claude Code)</dd></div>
+            <div><dt>Tools &amp; DevOps</dt><dd>Git, GitHub Actions, Gradle, PyInstaller, Ruff/Bandit</dd></div>
+          </dl>
         </div>
       </section>
 
@@ -436,11 +463,19 @@
           <article class="card glass">
             <h3>File Suite</h3>
             <p>Desktop file utility for organizing files, scanning for duplicates and undoing changes, for Linux and Windows.</p>
+            <ul class="facts">
+              <li>Python · CustomTkinter · Pillow · PyInstaller</li>
+              <li>Unit tests, Ruff, Bandit and pip-audit in CI; Windows support experimental.</li>
+            </ul>
             <a href="https://github.com/teppe21/File-Suite" data-umami-event="File Suite">File Suite on GitHub</a>
           </article>
           <article class="card glass">
             <h3>Finances</h3>
             <p>Native Android personal finance app built with Kotlin and Jetpack Compose, with notification import, receipt OCR and automatic categorization.</p>
+            <ul class="facts">
+              <li>Kotlin · Jetpack Compose · Room · CameraX · ML&nbsp;Kit</li>
+              <li>Unit tests and Android lint in CI; Room migration and Compose UI tests.</li>
+            </ul>
             <a href="https://github.com/teppe21/Finances_Android" data-umami-event="Finances">Finances on GitHub</a>
           </article>
         </div>
