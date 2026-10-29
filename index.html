@@ -17,37 +17,36 @@
   <!-- Umami analytics (cookie-free). Each link has data-umami-event="..." so clicks show up as events in the Umami dashboard. -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="decac811-934c-48a4-8481-5ea63d1e7852"></script>
 
+  <link rel="preload" href="assets/PixelifySans.woff2" as="font" type="font/woff2" crossorigin>
+
   <!-- Favicon: a 2x2 chessboard, inline so it costs no request -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23E2E2E2'/%3E%3Cpath d='M7 0h9v16H0V7a7 7 0 0 1 7-7zm9 16h16v9a7 7 0 0 1-7 7h-9z' fill='%23000000'/%3E%3C/svg%3E">
 
   <style>
+    /* Pixelify Sans (SIL OFL), subset to Latin, self-hosted */
+    @font-face {
+      font-family: "Pixelify Sans";
+      src: url(assets/PixelifySans.woff2) format("woff2");
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
     /* ================= COLORS: change the theme here ================= */
     :root {
       --bg: #000000;              /* page base */
       --text: #F2F2F2;
       --muted: #BDBDBD;           /* secondary text */
-      --ink: #E2E2E2;             /* piece icons, links */
+      --ink: #E2E2E2;             /* icons, links */
       --focus: #8DB8FF;
 
-      --sq-light: #0B0B0B;        /* chessboard squares */
-      --sq-dark: #000000;
+      --panel: rgba(0, 0, 0, 0.78);              /* dark enough for AA text, crisp snow still shows through */
+      --panel-hover: rgba(22, 22, 22, 0.86);
+      --line: rgba(255, 255, 255, 0.35);         /* pixel border */
+      --line-hover: #FFFFFF;
+      --solid: #0A0A0A;                          /* fallback: no alpha */
 
-      --blob-1: #1B2740;          /* midnight */
-      --blob-2: #5C3F10;          /* amber */
-      --blob-3: #1A355E;          /* lake */
-      --blob-4: #382A57;          /* heather */
-
-      --glass: rgba(16, 16, 16, 0.55);           /* translucent surface */
-      --glass-hover: rgba(30, 30, 30, 0.62);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-edge: rgba(255, 255, 255, 0.20);   /* specular top edge */
-      --glass-shade: rgba(0, 0, 0, 0.50);
-      --spec: rgba(255, 255, 255, 0.10);         /* pointer highlight */
-      --solid: #121212;                          /* fallback: no glass */
-
-      --r-card: 28px;
-      --r-btn: 22px;
-      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --px: 3px;                                 /* one snow pixel: keep equal to pixelSize in assets/pixel-snow.js */
+      --pixel-font: "Pixelify Sans", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
       --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
@@ -70,101 +69,46 @@
     a { color: inherit; }
 
     a:focus-visible {
-      outline: 3px solid var(--focus);
-      outline-offset: 3px;
+      outline: var(--px) solid var(--focus);
+      outline-offset: var(--px);
     }
 
-    /* ================= Background: board, blobs ================= */
+    /* ================= Background: PixelSnow (assets/pixel-snow.js) ================= */
     .bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       overflow: hidden;
-      perspective: 900px;
-      perspective-origin: 50% 20%;
     }
-
-    /* 8x8 board tilted away from the viewer, fading out at the edges */
-    .board {
-      position: absolute;
-      left: 50%;
-      bottom: -28vmax;
-      width: 130vmax;
-      aspect-ratio: 1;
-      margin-left: -65vmax;
-      background: repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%) 0 0 / 25% 25%;
-      transform: rotateX(58deg);
-      transform-origin: 50% 100%;
-      /* fades out toward the far edge and the sides */
-      -webkit-mask-image: radial-gradient(farthest-side at 50% 100%, #000 25%, transparent 95%);
-      mask-image: radial-gradient(farthest-side at 50% 100%, #000 25%, transparent 95%);
-    }
-
-    /* Soft colour blobs: radial gradients (no filter) moved only with transforms */
-    .blob {
-      position: absolute;
-      width: 70vmax;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      opacity: 0.55;
-      animation: drift 60s ease-in-out infinite alternate;
-    }
-    .blob:nth-child(2) { background: radial-gradient(closest-side, var(--blob-1), transparent); top: -25vmax; left: -25vmax; }
-    .blob:nth-child(3) { background: radial-gradient(closest-side, var(--blob-2), transparent); top: 10vh; right: -35vmax; animation-duration: 75s; animation-delay: -20s; }
-    .blob:nth-child(4) { background: radial-gradient(closest-side, var(--blob-3), transparent); bottom: -35vmax; left: -10vmax; animation-duration: 90s; animation-delay: -40s; }
-    .blob:nth-child(5) { background: radial-gradient(closest-side, var(--blob-4), transparent); top: 35vh; left: 30vw; width: 50vmax; opacity: 0.4; animation-duration: 70s; animation-delay: -10s; }
-
-    @keyframes drift {
-      to { transform: translate3d(12vmax, 8vmax, 0) scale(1.15); }
-    }
-
-    /* ================= Glass surface ================= */
-    /* Fallback first: an opaque surface for browsers without backdrop-filter */
-    .glass {
-      position: relative;
-      background: var(--solid);
-      border: 1px solid var(--glass-border);
-      box-shadow:
-        inset 0 1px 0 var(--glass-edge),          /* specular top edge */
-        inset 0 -1px 0 var(--glass-shade),
-        0 1px 2px var(--glass-shade),
-        0 10px 30px -8px var(--glass-shade);
-    }
-    .glass > * { position: relative; }            /* keep content above the highlight */
-
-    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-      .glass {
-        background: var(--glass);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        backdrop-filter: blur(20px) saturate(180%);
-      }
-    }
-
-    /* Pointer-following highlight (position set by the script at the bottom) */
-    .glass::before {
-      content: "";
+    .bg canvas {
       position: absolute;
       inset: 0;
-      border-radius: inherit;
-      pointer-events: none;
-      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 0%), var(--spec), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-      .glass:hover::before { opacity: 1; }
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
-    /* Users who ask for less transparency or more contrast get solid surfaces */
-    @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-      .glass {
-        background: var(--solid);
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-      }
+    /* Text that sits directly on the snow gets a hard 1-pixel shadow, like old games */
+    .name, .tagline, .projects h2, .footer { text-shadow: 0 var(--px) 0 #000; }
+
+    /* ================= Pixel panel ================= */
+    /* The border is four hard box-shadows, so the corners are notched by one pixel */
+    .panel {
+      background: var(--solid);
+      box-shadow:
+        calc(var(--px) * -1) 0 0 0 var(--line),
+        var(--px) 0 0 0 var(--line),
+        0 calc(var(--px) * -1) 0 0 var(--line),
+        0 var(--px) 0 0 var(--line);
     }
+    @supports (background: rgb(0 0 0 / 50%)) {
+      .panel { background: var(--panel); }
+    }
+
+    /* Users who ask for more contrast get opaque panels and full-strength text */
     @media (prefers-contrast: more) {
-      :root { --muted: var(--text); --glass-border: var(--text); }
+      .panel { background: var(--solid); }
+      :root { --muted: var(--text); --line: var(--text); }
     }
 
     /* ================= Layout ================= */
@@ -203,36 +147,29 @@
       gap: 0.25rem;
     }
 
-    /* Avatar: plain circular photo */
+    /* Avatar: square photo with a pixel border */
     .avatar {
       width: clamp(116px, 30vw, 148px);
       aspect-ratio: 1;
-      border-radius: 50%;
       margin-bottom: 1rem;
-    }
-    .avatar-inner {
       display: grid;
       place-items: center;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
       overflow: hidden;
-      background: var(--glass-hover);
       color: var(--ink);
+      font-family: var(--pixel-font);
       font-size: clamp(2rem, 9vw, 2.6rem);
       font-weight: 700;
-      letter-spacing: 0.02em;
     }
     /* Photo and "LL" share one cell; the photo covers the initials when it loads */
-    .avatar-inner > * { grid-area: 1 / 1; }
+    .avatar > * { grid-area: 1 / 1; }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .name {
       margin: 0;
+      font-family: var(--pixel-font);
       font-size: clamp(1.75rem, 1.3rem + 2.2vw, 2.75rem);
       line-height: 1.1;
       font-weight: 700;
-      letter-spacing: -0.025em;
     }
 
     .tagline {
@@ -258,23 +195,22 @@
       gap: 0.9rem;
       min-height: 64px;
       padding: 0.7rem 1.1rem 0.7rem 0.9rem;
-      border-radius: var(--r-btn);
       text-decoration: none;
-      transition: transform 0.45s var(--spring), background-color 0.2s ease;
       -webkit-tap-highlight-color: transparent;
     }
-    .link:focus-visible { outline-offset: 4px; border-radius: var(--r-btn); }
 
+    /* 12x12 pixel icons at 3x: one icon pixel = one snow pixel */
     .link svg {
       flex: none;
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       color: var(--ink);
       fill: currentColor;
+      shape-rendering: crispEdges;
     }
 
     .link-text { display: grid; min-width: 0; }
-    .link-label { font-weight: 600; font-size: 1.0625rem; line-height: 1.25; }
+    .link-label { font-family: var(--pixel-font); font-weight: 600; font-size: 1.25rem; line-height: 1.25; }
     .link-sub {
       color: var(--muted);
       font-size: 0.875rem;
@@ -284,20 +220,17 @@
     }
 
     @media (hover: hover) {
-      .link:hover { transform: scale(1.015); }
-      @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-        .link:hover { background: var(--glass-hover); }
-      }
+      .link:hover { --line: var(--line-hover); background: var(--panel-hover); }
     }
-    .link:active { transform: scale(0.97); transition-duration: 0.15s; }
+    .link:active { transform: translateY(var(--px)); }   /* button press, one pixel down */
 
     /* ================= Projects ================= */
     .projects { margin-top: 2.5rem; }
     .projects h2 {
       margin: 0 0 1rem;
-      font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+      font-family: var(--pixel-font);
+      font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
       font-weight: 700;
-      letter-spacing: -0.015em;
     }
 
     .cards { display: grid; gap: 0.875rem; }
@@ -309,18 +242,18 @@
       display: flex;
       flex-direction: column;
       padding: 1.25rem 1.375rem 1.125rem;
-      border-radius: var(--r-card);
     }
-    .card h3 { margin: 0 0 0.375rem; font-size: 1.125rem; }
+    .card h3 { margin: 0 0 0.375rem; font-family: var(--pixel-font); font-size: 1.375rem; font-weight: 600; line-height: 1.2; }
     .card p { margin: 0 0 0.875rem; color: var(--muted); font-size: 0.9375rem; flex: 1; }
     .card a {
       align-self: flex-start;
       padding: 0.4rem 0;
       color: var(--ink);
+      font-family: var(--pixel-font);
       font-weight: 600;
-      font-size: 0.9375rem;
-      text-underline-offset: 3px;
-      border-radius: 6px;
+      font-size: 1.0625rem;
+      text-decoration-thickness: var(--px);
+      text-underline-offset: 5px;
     }
 
     /* One-line tech stack and quality facts under a card description */
@@ -335,69 +268,38 @@
     /* Skills: label and items on one line, wrapping on narrow screens */
     .skills { margin: 0; display: grid; gap: 0.5rem; font-size: 0.9375rem; }
     .skills div { display: flex; flex-wrap: wrap; column-gap: 0.5rem; }
-    .skills dt { font-weight: 600; }
+    .skills dt { font-family: var(--pixel-font); font-weight: 600; font-size: 1.0625rem; }
     .skills dd { margin: 0; color: var(--muted); }
 
     /* ================= Footer ================= */
     .footer {
       color: var(--text);
-      font-size: 0.8125rem;
+      font-family: var(--pixel-font);
+      font-size: 0.9375rem;
       text-align: center;
     }
     .footer p { margin: 0; }
     @media (min-width: 900px) { .footer { text-align: left; } }
-
-    /* ================= Reduced motion: everything stands still ================= */
-    @media (prefers-reduced-motion: reduce) {
-      .blob { animation: none; }
-      .link { transition: none; }
-      .link:hover, .link:active { transform: none; }
-    }
   </style>
 </head>
 <body>
-  <!-- Hand-drawn chess pieces, defined once and reused with <use> -->
+  <!-- Hand-drawn 12x12 pixel-art chess pieces, defined once and reused with <use> -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="i-knight" viewBox="0 0 48 48">
-      <path fill-rule="evenodd" d="M16 39c0-7 4-11 6-14-4 1-7 2-9 0s-1-5 2-7l7-6c1-3 3-5 5-6l1-3 2 4c5 3 7 10 6 18-1 6-3 10-3 14zm9.3-25a1.3 1.3 0 1 0-2.6 0 1.3 1.3 0 1 0 2.6 0z"/>
-      <rect x="12" y="39" width="24" height="5" rx="2"/>
-    </symbol>
-    <symbol id="i-bishop" viewBox="0 0 48 48">
-      <circle cx="24" cy="6" r="2.6"/>
-      <path fill-rule="evenodd" d="M24 9c6 5 7 11 4 16h-8c-3-5-2-11 4-16zm1.2 4 2 1.2-3 5-2-1.2z"/>
-      <rect x="18" y="25" width="12" height="3" rx="1.5"/>
-      <path d="M20 28c0 5-2 9-4 11h16c-2-2-4-6-4-11z"/>
-      <rect x="12" y="39" width="24" height="5" rx="2"/>
-    </symbol>
-    <symbol id="i-rook" viewBox="0 0 48 48">
-      <path d="M13 8h5v4h3.5V8h5v4H30V8h5v9l-4 3v17H17V20l-4-3z"/>
-      <rect x="10" y="37" width="28" height="7" rx="2"/>
-    </symbol>
-    <symbol id="i-pawn" viewBox="0 0 48 48">
-      <circle cx="24" cy="13" r="6"/>
-      <rect x="18" y="19" width="12" height="3" rx="1.5"/>
-      <path d="M21 22h6c1 6 3 12 4 17H17c1-5 3-11 4-17z"/>
-      <rect x="12" y="39" width="24" height="5" rx="2"/>
-    </symbol>
+    <symbol id="i-knight" viewBox="0 0 12 12"><path d="M5 0h2v1h-2zM4 1h4v1h-4zM2 2h7v1h-7zM1 3h2v1h-2zM4 3h6v1h-6zM1 4h8v1h-8zM1 5h7v1h-7zM3 6h5v1h-5zM4 7h5v1h-5zM3 8h7v1h-7zM2 9h9v1h-9zM2 10h9v1h-9zM2 11h9v1h-9z"/></symbol>
+    <symbol id="i-bishop" viewBox="0 0 12 12"><path d="M5 0h2v1h-2zM4 1h4v1h-4zM3 2h6v1h-6zM3 3h3v1h-3zM7 3h2v1h-2zM3 4h2v1h-2zM6 4h3v1h-3zM3 5h6v1h-6zM4 6h4v1h-4zM2 7h8v1h-8zM5 8h2v1h-2zM4 9h4v1h-4zM3 10h6v1h-6zM2 11h8v1h-8z"/></symbol>
+    <symbol id="i-rook" viewBox="0 0 12 12"><path d="M2 1h2v1h-2zM5 1h2v1h-2zM8 1h2v1h-2zM2 2h8v1h-8zM3 3h6v1h-6zM4 4h4v1h-4zM4 5h4v1h-4zM4 6h4v1h-4zM4 7h4v1h-4zM3 8h6v1h-6zM2 9h8v1h-8zM1 10h10v1h-10zM1 11h10v1h-10z"/></symbol>
+    <symbol id="i-pawn" viewBox="0 0 12 12"><path d="M5 1h2v1h-2zM4 2h4v1h-4zM4 3h4v1h-4zM5 4h2v1h-2zM4 5h4v1h-4zM5 6h2v1h-2zM4 7h4v1h-4zM4 8h4v1h-4zM3 9h6v1h-6zM2 10h8v1h-8zM2 11h8v1h-8z"/></symbol>
   </svg>
 
-  <!-- Decorative background -->
-  <div class="bg" aria-hidden="true">
-    <div class="board"></div>
-    <div class="blob"></div>
-    <div class="blob"></div>
-    <div class="blob"></div>
-    <div class="blob"></div>
-  </div>
+  <!-- Decorative background: PixelSnow, see assets/pixel-snow.js -->
+  <div class="bg pixel-snow-container" aria-hidden="true"><canvas></canvas></div>
 
   <div class="page">
     <header class="profile">
-      <div class="avatar">
-        <div class="avatar-inner">
-          <span aria-hidden="true">LL</span>
-          <!-- PROFILE PHOTO: replace assets/profile.jpg (square, 512x512). If it is missing, the "LL" initials show instead. -->
-          <img src="assets/profile.jpg" alt="Lámfalusi Levente" width="512" height="512" onerror="this.remove()">
-        </div>
+      <div class="avatar panel">
+        <span aria-hidden="true">LL</span>
+        <!-- PROFILE PHOTO: replace assets/profile.jpg (square, 512x512). If it is missing, the "LL" initials show instead. -->
+        <img src="assets/profile.jpg" alt="Lámfalusi Levente" width="512" height="512" onerror="this.remove()">
       </div>
       <h1 class="name">Lámfalusi Levente</h1>
       <p class="tagline">First-year Computer Science BSc student at the University of Debrecen and Software Architect at Sidekick Automations, ensuring systems are production-ready. Especially interested in AI, data science and data engineering.</p>
@@ -408,26 +310,26 @@
       <nav aria-label="Profiles and contact">
         <ul class="links">
           <li>
-            <a class="link glass" href="https://github.com/teppe21" data-umami-event="GitHub">
+            <a class="link panel" href="https://github.com/teppe21" data-umami-event="GitHub">
               <svg aria-hidden="true"><use href="#i-knight"/></svg>
               <span class="link-text"><span class="link-label">GitHub</span><span class="link-sub">github.com/teppe21</span></span>
             </a>
           </li>
           <li>
             <!-- "á" is percent-encoded (%C3%A1) in the href so every in-app browser opens it correctly -->
-            <a class="link glass" href="https://www.linkedin.com/in/levente-l%C3%A1mfalusi" data-umami-event="LinkedIn">
+            <a class="link panel" href="https://www.linkedin.com/in/levente-l%C3%A1mfalusi" data-umami-event="LinkedIn">
               <svg aria-hidden="true"><use href="#i-bishop"/></svg>
               <span class="link-text"><span class="link-label">LinkedIn</span><span class="link-sub">linkedin.com/in/levente-lámfalusi</span></span>
             </a>
           </li>
           <li>
-            <a class="link glass" href="https://github.com/teppe21?tab=repositories" data-umami-event="Projects">
+            <a class="link panel" href="https://github.com/teppe21?tab=repositories" data-umami-event="Projects">
               <svg aria-hidden="true"><use href="#i-rook"/></svg>
               <span class="link-text"><span class="link-label">Projects</span><span class="link-sub">All repositories on GitHub</span></span>
             </a>
           </li>
           <li>
-            <a class="link glass" href="mailto:lamfalusilevi@gmail.com" data-umami-event="Email">
+            <a class="link panel" href="mailto:lamfalusilevi@gmail.com" data-umami-event="Email">
               <svg aria-hidden="true"><use href="#i-pawn"/></svg>
               <span class="link-text"><span class="link-label">Email</span><span class="link-sub">lamfalusilevi@gmail.com</span></span>
             </a>
@@ -438,7 +340,7 @@
       <section class="projects" aria-labelledby="experience-title">
         <h2 id="experience-title">Experience</h2>
         <div class="cards">
-          <article class="card glass">
+          <article class="card panel">
             <h3>Software Architect (part-time)</h3>
             <p>October 2026 – Present. Making sure systems work correctly and reliably before they reach production: design reviews, validation, quality gates and release readiness. Sidekick Automations builds company-tailored AI and automation solutions.</p>
             <a href="https://sidekickautomations.hu/" data-umami-event="Sidekick Automations">Sidekick Automations</a>
@@ -448,7 +350,7 @@
 
       <section class="projects" aria-labelledby="skills-title">
         <h2 id="skills-title">Skills</h2>
-        <div class="card glass">
+        <div class="card panel">
           <dl class="skills">
             <div><dt>Languages</dt><dd>Python, Kotlin</dd></div>
             <div><dt>Data/AI</dt><dd>SQLite (Room), on-device OCR (ML Kit), AI-assisted development (Claude Code)</dd></div>
@@ -460,7 +362,7 @@
       <section class="projects" aria-labelledby="projects-title">
         <h2 id="projects-title">Projects</h2>
         <div class="cards">
-          <article class="card glass">
+          <article class="card panel">
             <h3>File Suite</h3>
             <p>Desktop file utility for organizing files, scanning for duplicates and undoing changes, for Linux and Windows.</p>
             <ul class="facts">
@@ -469,7 +371,7 @@
             </ul>
             <a href="https://github.com/teppe21/File-Suite" data-umami-event="File Suite">File Suite on GitHub</a>
           </article>
-          <article class="card glass">
+          <article class="card panel">
             <h3>Finances</h3>
             <p>Native Android personal finance app built with Kotlin and Jetpack Compose, with notification import, receipt OCR and automatic categorization.</p>
             <ul class="facts">
@@ -487,28 +389,6 @@
     </footer>
   </div>
 
-  <script>
-    // Specular highlight that follows the mouse over glass surfaces.
-    // Only for fine pointers (mouse/trackpad) and when motion is allowed.
-    (function () {
-      var ok = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-      var last = null, queued = false;
-
-      addEventListener('pointermove', function (e) {
-        if (!ok.matches) return;
-        last = e;
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(function () {   // at most one update per frame
-          queued = false;
-          var el = last.target.closest && last.target.closest('.glass');
-          if (!el) return;
-          var r = el.getBoundingClientRect();
-          el.style.setProperty('--mx', (last.clientX - r.left) + 'px');
-          el.style.setProperty('--my', (last.clientY - r.top) + 'px');
-        });
-      }, { passive: true });
-    })();
-  </script>
+  <script type="module" src="assets/pixel-snow.js"></script>
 </body>
 </html>
